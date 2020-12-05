@@ -180,6 +180,38 @@ class WCFMmp_Shipping_Zone {
 
     return $method;
   }
+    public static function get_shipping_method_and_vendor_id( $zone_id, $vendor_id ) {
+        global $wpdb;
+
+        $sql = "SELECT * FROM {$wpdb->prefix}wcfm_marketplace_shipping_zone_methods WHERE `zone_id`={$zone_id} AND `vendor_id`={$vendor_id}";
+        $results = $wpdb->get_results( $sql );
+
+        $method = array();
+
+        foreach ( $results as $key => $result ) {
+            $default_settings = array(
+                'title'       => self::get_method_label( $result->method_id ),
+                'description' => __( 'Lets you charge a rate for shipping', 'wc-multivendor-marketplace' ),
+                'cost'        => '0',
+                'tax_status'  => 'none'
+            );
+
+            $method_id = $result->method_id .':'. $result->instance_id;
+            $settings = ! empty( $result->settings ) ? maybe_unserialize( $result->settings ) : array();
+            $settings = wp_parse_args( $settings, $default_settings );
+
+            $method[$method_id]['id'] = $result->method_id.':'.$result->instance_id;
+            $method[$method_id]['instance_id'] = $result->instance_id;
+            $method[$method_id]['method_id']          = $result->method_id;
+            //$method[$method_id]['enabled']     = ( $result->is_enabled ) ? 'yes' : 'no';
+            $method[$method_id]['label']       = $settings['title'];
+            $method[$method_id]['cost']       = $settings['cost'];
+            $method[$method_id]['cost']       = $settings['cost'];
+            $method[$method_id]['taxes']    = array();
+        }
+
+        return $method;
+    }
 
   /**
    * Update shipping method settings
@@ -280,6 +312,32 @@ class WCFMmp_Shipping_Zone {
         foreach ( $results as $key => $result ) {
             $locations[] = array(
                 'code' => $result->location_code,
+                'type'  => $result->location_type
+            );
+        }
+    }
+
+    return $locations;
+  }
+  public static function get_location_by_code( $location_code, $vendor_id = null ) {
+    global $wpdb;
+
+    $table_name = "{$wpdb->prefix}wcfm_marketplace_shipping_zone_locations";
+
+    if ( ! $vendor_id ) {
+        $vendor_id  = apply_filters( 'wcfm_current_vendor_id', get_current_user_id() );
+    }
+
+    $sql = "SELECT * FROM {$table_name} WHERE location_code='$location_code' AND vendor_id=$vendor_id";
+
+    $results = $wpdb->get_results( $sql );
+
+    $locations = array();
+
+    if ( $results ) {
+        foreach ( $results as $key => $result ) {
+            $locations[] = array(
+                'zone_id' => $result->zone_id,
                 'type'  => $result->location_type
             );
         }

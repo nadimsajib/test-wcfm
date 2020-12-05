@@ -254,6 +254,7 @@ class WC_Shipping {
 		if ( ! $this->enabled || empty( $packages ) ) {
 			return array();
 		}
+		//echo '<pre>';print_r($packages);exit;
 
 		// Calculate costs for passed packages.
 		foreach ( $packages as $package_key => $package ) {
@@ -325,6 +326,7 @@ class WC_Shipping {
 			// Get rates stored in the WC session data for this package.
 			$wc_session_key = 'shipping_for_package_' . $package_key;
 			$stored_rates   = WC()->session->get( $wc_session_key );
+			//echo '<pre>';print_r($stored_rates);exit;
 
 			// Calculate the hash for this package so we can tell if it's changed since last calculation.
 			$package_hash = 'wc_ship_' . md5( wp_json_encode( $package_to_hash ) . WC_Cache_Helper::get_transient_version( 'shipping' ) );
@@ -367,7 +369,50 @@ class WC_Shipping {
 					)
 				);
 			} else {
-				$package['rates'] = $stored_rates['rates'];
+                $zones = WC_Shipping_Zones::get_zones();
+                $vendor_id = $package['vendor_id'];
+                $parent_zone_id = 0;
+                foreach ($zones as $zone_id=>$zone){
+                    $parent_zone = WCFMmp_Shipping_Zone::get_locations( $zone_id,$vendor_id );
+                    $parent_zone_method = WCFMmp_Shipping_Zone::get_shipping_methods( $zone_id,$vendor_id );
+                    if(empty($parent_zone) && !empty($parent_zone_method)){
+                        $parent_zone_id = $zone_id;
+                    }
+                }
+                //echo '<pre>';print_r($package['destination']);exit;
+                if ( empty( $vendor_id ) ) {
+                    return;
+                }
+
+                $location_code = $package['destination']['country'] . ':' . $package['destination']['state'];
+                $location_zone_id = WCFMmp_Shipping_Zone::get_location_by_code( $location_code,$vendor_id );
+                //echo '<pre>';print_r([$location_zone_id]);exit;
+                if(!isset($location_zone_id[0]['zone_id'])){
+                    $location_zone_id[0]['zone_id'] = $parent_zone_id;
+                }
+                $shipping_methods = WCFMmp_Shipping_Zone::get_shipping_method_and_vendor_id( $location_zone_id[0]['zone_id'],$vendor_id );
+
+                foreach ( $shipping_methods as $shipping_method ) {
+                    //echo '<pre>';print_r($shipping_method->get_instance_id());exit;
+                    $rate = new WC_Shipping_Rate( $shipping_method['id'], $shipping_method['label'], $shipping_method['cost'], array(), $shipping_method['method_id'], $shipping_method['instance_id']);
+                    $rate->set_id( $shipping_method['id'] );
+                    $rate->set_method_id( $shipping_method['method_id'] );
+                    $rate->set_instance_id( $shipping_method['instance_id'] );
+                    $rate->set_label( $shipping_method['label'] );
+                    $rate->set_cost( $shipping_method['cost'] );
+                    $rate->set_taxes( $shipping_method['taxes'] );
+                    $package['rates'][$shipping_method['method_id']] = $rate;
+
+                }
+
+
+                //$shipping_methods = WCFMmp_Shipping_By_Zone::calculate_shipping( $package );
+                //$stored_rates['rates'] = $shipping_methods;
+
+				//$package['rates'] = $stored_rates['rates'];
+                //echo '<pre>';print_r($package['rates']);exit;
+				//echo '<pre>';print_r($package);exit;
+				//echo '<pre>';print_r($package);exit;
 			}
 		}
 		return $package;
