@@ -257,6 +257,7 @@ class WC_Shipping {
 		//echo '<pre>';print_r($packages);exit;
 
 		// Calculate costs for passed packages.
+        WC()->session->set( 'found_ship_by_distance' ,0);
 		foreach ( $packages as $package_key => $package ) {
 			$this->packages[ $package_key ] = $this->calculate_shipping_for_package( $package, $package_key );
 		}
@@ -419,6 +420,11 @@ class WC_Shipping {
                         $rate->set_cost( $country_cost[$package['destination']['country']] );
                         $package['rates']['flat_rate'] = $rate;
                     }
+                }else if($vendor_shipping_details['_wcfmmp_user_shipping_type'] == "by_weight"){
+                    $package['rates'] = $stored_rates['rates'];
+                }else if($vendor_shipping_details['_wcfmmp_user_shipping_type'] == "by_distance"){
+                    $package['rates'] = $stored_rates['rates'];
+                    WC()->session->set( 'found_ship_by_distance', 1 );
                 }
 
 

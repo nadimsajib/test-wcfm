@@ -305,7 +305,7 @@ class WCFMmp_Frontend {
 	function wcfmmp_checkout_user_location_fields( $fields ) {
 		global $WCFM, $WCFMmp;
 		if( ! WC()->is_rest_api_request() ) {
-			if( ( true === WC()->cart->needs_shipping() ) && apply_filters( 'wcfmmp_is_allow_checkout_user_location', true ) ) {
+			if( ( true === WC()->cart->needs_shipping() ) && apply_filters( 'wcfmmp_is_allow_checkout_user_location', true ) && WC()->session->get( 'found_ship_by_distance' ) == 1 ) {
 				$fields['billing']['wcfmmp_user_location'] = array(
 						'label'     => __( 'Delivery Location', 'wc-multivendor-marketplace' ),
 						'placeholder'   => _x( 'Insert your address ..', 'placeholder', 'wc-multivendor-marketplace' ),
@@ -336,7 +336,7 @@ class WCFMmp_Frontend {
 	 */
 	function wcfmmp_checkout_user_location_map( $checkout ) {
 		global $WCFM, $WCFMmp;
-		if( ( true === WC()->cart->needs_shipping() ) && apply_filters( 'wcfmmp_is_allow_checkout_user_location', true ) ) {
+		if( ( true === WC()->cart->needs_shipping() ) && apply_filters( 'wcfmmp_is_allow_checkout_user_location', true ) && WC()->session->get( 'found_ship_by_distance' ) == 1 ) {
 			?>
 			<div class="woocommerce-billing-fields__field-wrapper">
 				<div class="wcfmmp-user-locaton-map" id="wcfmmp-user-locaton-map"></div>

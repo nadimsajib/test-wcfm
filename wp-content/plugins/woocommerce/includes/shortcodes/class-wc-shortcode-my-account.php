@@ -62,7 +62,9 @@ class WC_Shortcode_My_Account {
 
 			if ( isset( $wp->query_vars['customer-logout'] ) ) {
 				/* translators: %s: logout url */
-				wc_add_notice( sprintf( __( 'Are you sure you want to log out? <a href="%s">Confirm and log out</a>', 'woocommerce' ), wc_logout_url() ) );
+                wp_safe_redirect( str_replace( '&amp;', '&', wp_logout_url( wc_get_page_permalink( 'myaccount' ) ) ) );
+                exit;
+				//wc_add_notice( sprintf( __( 'Are you sure you want to log out? <a href="%s">Confirm and log out</a>', 'woocommerce' ), wc_logout_url() ) );
 			}
 
 			// Collect notices before output.
