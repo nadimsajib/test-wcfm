@@ -422,10 +422,11 @@ function get_wcfm_marketplace_commission_types() {
 
 if(!function_exists('get_wcfm_marketplace_withdrwal_payment_methods')) {
 	function get_wcfm_marketplace_withdrwal_payment_methods() {
+	    //by nadim
 		$marketplace_withdrwal_payment_methods = array( 
-			                                      'paypal'        => __( 'PayPal', 'wc-frontend-manager' ),
+			                                      'paypal'        => __( 'PayPal (3 cent)', 'wc-frontend-manager' ),
 			                                      'skrill'        => __( 'Skrill', 'wc-multivendor-marketplace' ),
-			                                      'bank_transfer' => __( 'Bank Transfer', 'wc-multivendor-marketplace' ),
+			                                      'bank_transfer' => __( 'Bank Transfer (no charge)', 'wc-multivendor-marketplace' ),
 			                                      'by_cash'       => __( 'Cash Pay', 'wc-multivendor-marketplace' ),
 			                                      'wirecard'      => __( 'Wirecard (Moip)', 'wc-multivendor-marketplace' ),
 			                                      'stripe'        => __( 'Stripe', 'wc-frontend-manager' ), 

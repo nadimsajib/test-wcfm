@@ -2687,6 +2687,11 @@ if ( ! function_exists( 'woocommerce_form_field' ) ) {
 		if ( $args['required'] ) {
 			$args['class'][] = 'validate-required';
 			$required        = '&nbsp;<abbr class="required" title="' . esc_attr__( 'required', 'woocommerce' ) . '">*</abbr>';
+			//by nadim
+			if($args['id'] == 'wcfmmp_user_location'){
+                $required .= '<br><span style="font-size: 0.775em">Your delivery location is required as one or more items in your shopping cart has the cost of its delivery calculated by distance</span>';
+            }
+            //end by nadim
 		} else {
 			$required = '&nbsp;<span class="optional">(' . esc_html__( 'optional', 'woocommerce' ) . ')</span>';
 		}

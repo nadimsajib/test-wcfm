@@ -67,6 +67,8 @@
 </div>
   
 <div id="wcfmmp_settings_form_shipping_by_country" class="wcfm-content shipping_type by_country hide_if_shipping_disabled">
+    <!--by nadim -->
+    <span>Shipping by Country</span>
   <div class="wcfm_vendor_settings_heading">
     <h3><?php _e('Shipping By Country', 'wc-multivendor-marketplace'); ?></h3>
   </div>
@@ -172,6 +174,11 @@
 
 ?>
 <div id="wcfmmp_settings_form_shipping_by_zone" class="wcfm-content shipping_type by_zone hide_if_shipping_disabled">
+    <!--by nadim -->
+    <span>Shipping by Zone Selection
+By using this method you can select specific towns or groups of towns to each zone and assign either a flat rate, local pickup or free delivery option to them.
+You can leave a zone without any towns assigned and then the selected option will be assigned to all towns in Ireland.
+Or you can create zones with specific towns that assign particular shipping options to them and a zone without any towns which will apply options in that zone to everywhere else</span>
   <table class="wcfmmp-table shipping-zone-table">
     <thead>
       <tr>
@@ -238,6 +245,8 @@
 </div>
 
 <div id="wcfmmp_settings_form_shipping_by_weight" class="wcfm-content shipping_type by_weight hide_if_shipping_disabled">
+    <!--by nadim -->
+    <span>Shipping by weight</span>
   <div class="wcfm_vendor_settings_heading">
     <h3><?php _e('Shipping By Weight', 'wc-multivendor-marketplace'); ?></h3>
   </div>
@@ -375,6 +384,8 @@
 </div>
 
 <div id="wcfmmp_settings_form_shipping_by_distance" class="wcfm-content shipping_type by_distance hide_if_shipping_disabled">
+    <!--by nadim -->
+    <span>Shipping by distance</span>
   <div class="wcfm_vendor_settings_heading">
     <h3><?php _e('Shipping By Distance', 'wc-multivendor-marketplace'); ?></h3>
   </div>
