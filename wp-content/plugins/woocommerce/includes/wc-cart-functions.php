@@ -418,6 +418,10 @@ function wc_get_chosen_shipping_method_for_package( $key, $package ) {
 	} else {
 		$method_count = 0;
 	}
+	$pieces = explode(":", $chosen_method);
+	if(count($pieces) > 1){
+		$chosen_method = $pieces[0];
+	}
 
 	// If not set, not available, or available methods have changed, set to the DEFAULT option.
 	if ( ! $chosen_method || $changed || ! isset( $package['rates'][ $chosen_method ] ) || count( $package['rates'] ) !== $method_count ) {
